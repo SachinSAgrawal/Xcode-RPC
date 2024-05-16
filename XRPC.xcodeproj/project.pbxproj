@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03315AB82BD6A95B00507281 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03315AB72BD6A95B00507281 /* MenuBarView.swift */; };
+		034BB73F2BF643F100998759 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 034BB73D2BF643F100998759 /* LICENSE.txt */; };
+		034BB7402BF643F100998759 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 034BB73E2BF643F100998759 /* README.md */; };
+		AA0D56452BA12C1200E43D3B /* SwordRPC in Frameworks */ = {isa = PBXBuildFile; productRef = AA0D56442BA12C1200E43D3B /* SwordRPC */; };
+		AA789F3C2BA0E56200042E45 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F3B2BA0E56200042E45 /* AppDelegate.swift */; };
+		AA789F402BA0E56500042E45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA789F3F2BA0E56500042E45 /* Assets.xcassets */; };
+		AA789F432BA0E56500042E45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA789F412BA0E56500042E45 /* Main.storyboard */; };
+		AA789F492BA0E66900042E45 /* RPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F482BA0E66900042E45 /* RPC.swift */; };
+		AA789F4C2BA0E6F200042E45 /* AXSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AA789F4B2BA0E6F200042E45 /* AXSwift */; };
+		AA789F502BA0EC3800042E45 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F4F2BA0EC3800042E45 /* SetupView.swift */; };
+		AA789F522BA0EC3F00042E45 /* StatusHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F512BA0EC3F00042E45 /* StatusHeaderView.swift */; };
+		AAA4E7752BA1304A00AA5FAA /* AXScrape.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03315AB72BD6A95B00507281 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		034BB73D2BF643F100998759 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		034BB73E2BF643F100998759 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0377A1772BD9E0B800281989 /* SwordRPC */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwordRPC; sourceTree = "<group>"; };
+		AA789F392BA0E56200042E45 /* Xcode RPC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Xcode RPC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA789F3B2BA0E56200042E45 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA789F3F2BA0E56500042E45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA789F422BA0E56500042E45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		AA789F442BA0E56500042E45 /* XRPC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = XRPC.entitlements; sourceTree = "<group>"; };
+		AA789F482BA0E66900042E45 /* RPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPC.swift; sourceTree = "<group>"; };
+		AA789F4F2BA0EC3800042E45 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		AA789F512BA0EC3F00042E45 /* StatusHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusHeaderView.swift; sourceTree = "<group>"; };
+		AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXScrape.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA789F362BA0E56200042E45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0D56452BA12C1200E43D3B /* SwordRPC in Frameworks */,
+				AA789F4C2BA0E6F200042E45 /* AXSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA789EEC2BA0D21500042E45 = {
+			isa = PBXGroup;
+			children = (
+				034BB73D2BF643F100998759 /* LICENSE.txt */,
+				034BB73E2BF643F100998759 /* README.md */,
+				AA789F3A2BA0E56200042E45 /* XRPC */,
+				AA789EF62BA0D21500042E45 /* Products */,
+				AA789F4A2BA0E6F200042E45 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		AA789EF62BA0D21500042E45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA789F392BA0E56200042E45 /* Xcode RPC.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA789F3A2BA0E56200042E45 /* XRPC */ = {
+			isa = PBXGroup;
+			children = (
+				AA789F3B2BA0E56200042E45 /* AppDelegate.swift */,
+				AA789F4F2BA0EC3800042E45 /* SetupView.swift */,
+				AA789F512BA0EC3F00042E45 /* StatusHeaderView.swift */,
+				03315AB72BD6A95B00507281 /* MenuBarView.swift */,
+				AA789F482BA0E66900042E45 /* RPC.swift */,
+				AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */,
+				AA789F3F2BA0E56500042E45 /* Assets.xcassets */,
+				AA789F412BA0E56500042E45 /* Main.storyboard */,
+				AA789F442BA0E56500042E45 /* XRPC.entitlements */,
+			);
+			path = XRPC;
+			sourceTree = "<group>";
+		};
+		AA789F4A2BA0E6F200042E45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0377A1772BD9E0B800281989 /* SwordRPC */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA789F382BA0E56200042E45 /* XRPC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA789F452BA0E56500042E45 /* Build configuration list for PBXNativeTarget "XRPC" */;
+			buildPhases = (
+				AA789F352BA0E56200042E45 /* Sources */,
+				AA789F362BA0E56200042E45 /* Frameworks */,
+				AA789F372BA0E56200042E45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XRPC;
+			packageProductDependencies = (
+				AA789F4B2BA0E6F200042E45 /* AXSwift */,
+				AA0D56442BA12C1200E43D3B /* SwordRPC */,
+			);
+			productName = XRPC;
+			productReference = AA789F392BA0E56200042E45 /* Xcode RPC.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA789EED2BA0D21500042E45 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					AA789F382BA0E56200042E45 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+				};
+			};
+			buildConfigurationList = AA789EF02BA0D21500042E45 /* Build configuration list for PBXProject "XRPC" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AA789EEC2BA0D21500042E45;
+			packageReferences = (
+				AA789F0C2BA0D5B900042E45 /* XCRemoteSwiftPackageReference "AXSwift" */,
+			);
+			productRefGroup = AA789EF62BA0D21500042E45 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA789F382BA0E56200042E45 /* XRPC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA789F372BA0E56200042E45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				034BB73F2BF643F100998759 /* LICENSE.txt in Resources */,
+				AA789F402BA0E56500042E45 /* Assets.xcassets in Resources */,
+				034BB7402BF643F100998759 /* README.md in Resources */,
+				AA789F432BA0E56500042E45 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA789F352BA0E56200042E45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA789F3C2BA0E56200042E45 /* AppDelegate.swift in Sources */,
+				03315AB82BD6A95B00507281 /* MenuBarView.swift in Sources */,
+				AA789F522BA0EC3F00042E45 /* StatusHeaderView.swift in Sources */,
+				AA789F502BA0EC3800042E45 /* SetupView.swift in Sources */,
+				AA789F492BA0E66900042E45 /* RPC.swift in Sources */,
+				AAA4E7752BA1304A00AA5FAA /* AXScrape.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AA789F412BA0E56500042E45 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AA789F422BA0E56500042E45 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AA789F022BA0D21800042E45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "Xcode RPC";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA789F032BA0D21800042E45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "Xcode RPC";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		AA789F462BA0E56500042E45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = XRPC/XRPC.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 44LNM8FN8U;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.llsc12.XRPC;
+				PRODUCT_NAME = "Xcode RPC";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA789F472BA0E56500042E45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = XRPC/XRPC.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 44LNM8FN8U;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.llsc12.XRPC;
+				PRODUCT_NAME = "Xcode RPC";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA789EF02BA0D21500042E45 /* Build configuration list for PBXProject "XRPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA789F022BA0D21800042E45 /* Debug */,
+				AA789F032BA0D21800042E45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA789F452BA0E56500042E45 /* Build configuration list for PBXNativeTarget "XRPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA789F462BA0E56500042E45 /* Debug */,
+				AA789F472BA0E56500042E45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA789F0C2BA0D5B900042E45 /* XCRemoteSwiftPackageReference "AXSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tmandry/AXSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA0D56442BA12C1200E43D3B /* SwordRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwordRPC;
+		};
+		AA789F4B2BA0E6F200042E45 /* AXSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA789F0C2BA0D5B900042E45 /* XCRemoteSwiftPackageReference "AXSwift" */;
+			productName = AXSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = AA789EED2BA0D21500042E45 /* Project object */;
+}
