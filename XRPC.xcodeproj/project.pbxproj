@@ -19,6 +19,7 @@
 		AA789F502BA0EC3800042E45 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F4F2BA0EC3800042E45 /* SetupView.swift */; };
 		AA789F522BA0EC3F00042E45 /* StatusHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA789F512BA0EC3F00042E45 /* StatusHeaderView.swift */; };
 		AAA4E7752BA1304A00AA5FAA /* AXScrape.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */; };
+		AAA4E7912BA13F0000AA5FAA /* FileIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA4E7902BA13F0000AA5FAA /* FileIcons.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		AA789F4F2BA0EC3800042E45 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
 		AA789F512BA0EC3F00042E45 /* StatusHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusHeaderView.swift; sourceTree = "<group>"; };
 		AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXScrape.swift; sourceTree = "<group>"; };
+		AAA4E7902BA13F0000AA5FAA /* FileIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileIcons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				03315AB72BD6A95B00507281 /* MenuBarView.swift */,
 				AA789F482BA0E66900042E45 /* RPC.swift */,
 				AAA4E7742BA1304A00AA5FAA /* AXScrape.swift */,
+				AAA4E7902BA13F0000AA5FAA /* FileIcons.swift */,
 				AA789F3F2BA0E56500042E45 /* Assets.xcassets */,
 				AA789F412BA0E56500042E45 /* Main.storyboard */,
 				AA789F442BA0E56500042E45 /* XRPC.entitlements */,
@@ -178,6 +181,7 @@
 				AA789F502BA0EC3800042E45 /* SetupView.swift in Sources */,
 				AA789F492BA0E66900042E45 /* RPC.swift in Sources */,
 				AAA4E7752BA1304A00AA5FAA /* AXScrape.swift in Sources */,
+				AAA4E7912BA13F0000AA5FAA /* FileIcons.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,7 +253,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024-2026 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -310,7 +314,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024-2026 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -329,20 +333,20 @@
 				CODE_SIGN_ENTITLEMENTS = XRPC/XRPC.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 44LNM8FN8U;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LP92N2QT42;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024-2026 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.llsc12.XRPC;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = llsc12.SachinAgrawal.XRPC;
 				PRODUCT_NAME = "Xcode RPC";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -357,20 +361,20 @@
 				CODE_SIGN_ENTITLEMENTS = XRPC/XRPC.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 44LNM8FN8U;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LP92N2QT42;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "An app that shows Xcode as your Discord RPC. Copyright © 2024-2026 Lakhan Lothiyi and Sachin Agrawal by the MIT License.";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.llsc12.XRPC;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = llsc12.SachinAgrawal.XRPC;
 				PRODUCT_NAME = "Xcode RPC";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
