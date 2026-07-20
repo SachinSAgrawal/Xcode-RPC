@@ -11,16 +11,24 @@ import SwiftUI
 struct StatusView: View {
     // Observed RPC object
     @ObservedObject var rpc = RPC.shared
-    
+
     // Observed scraper object for Xcode
     @ObservedObject var ax = RPC.shared.scraper
-    
+
     var body: some View {
-        VStack(spacing: 6) {
+        // Space the divider itself so the gap above matches the one the menu insets below
+        VStack(spacing: 0) {
             VStack(spacing: 6) {
                 // Discord RPC status
                 HStack {
-                    Text("RPC Connected")
+                    // Mirror the Xcode row so both read as a name over its current state
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("RPC")
+                        Text(rpc.rpcConnected ? "Active" : "Inactive")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                     Spacer()
                     if rpc.rpcConnected {
                         // Checkmark icon if connected
@@ -35,7 +43,14 @@ struct StatusView: View {
                 
                 // Xcode status
                 HStack {
-                    Text("Xcode Running")
+                    // Drop the secondary line underneath since the icon only says running or not
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Xcode")
+                        Text(ax.presenceState.displayName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                     Spacer()
                     switch ax.presenceState {
                     // If Xcode is not running
@@ -50,27 +65,95 @@ struct StatusView: View {
                     }
                 }
             }
-            .frame(maxHeight: .infinity)
-            
+
+            Divider()
+                .padding(.top, 6)
+                .padding(.bottom, 12)
+
+            // Show what Discord is currently reporting to everyone else
+            PresencePreviewView(preview: rpc.preview)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(16)
+        // Match the stock menu item inset and let the menu draw its own vertical gap
+        .padding(.horizontal, 14)
+        .padding(.vertical, 4)
+        .frame(width: 240, alignment: .topLeading)
+        // Pin to the ideal height so the hosting view reports a content sized intrinsic height
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
-// MARK: Header (Unused)
-struct HeaderView: View {
+// MARK: Presence Preview
+
+// Approximate the Discord activity card so this matches what others see on the profile
+struct PresencePreviewView: View {
+    let preview: PresencePreview
+
     var body: some View {
-        VStack(spacing: 6) {
-            // Title text
-            Text("Xcode RPC")
-                .font(.title)
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Showing on Discord")
+                .font(.caption)
                 .fontWeight(.semibold)
-                .fontDesign(.rounded)
-                .frame(maxWidth: .infinity, alignment: .center)
-            // Formatting stuff
+                .foregroundStyle(.secondary)
+
+            if preview.isActive {
+                HStack(alignment: .top, spacing: 8) {
+                    // Draw the same remote image handed to Discord so breakage shows up here too
+                    artwork
+
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Xcode RPC")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+
+                        if let details = preview.details {
+                            Text(details)
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+
+                        if let state = preview.state {
+                            Text(state)
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+
+                        if let start = preview.start {
+                            // Match the elapsed counter Discord runs on the card
+                            Text(start, style: .timer)
+                                .font(.caption)
+                                .monospacedDigit()
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    Spacer(minLength: 0)
+                }
+            } else {
+                Text("Nothing is being shown")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // Render remote art behind a placeholder so the row does not jump while it loads
+    @ViewBuilder private var artwork: some View {
+        Group {
+            if let urlString = preview.imageURL, let url = URL(string: urlString) {
+                AsyncImage(url: url) { image in
+                    image.resizable().scaledToFit()
+                } placeholder: {
+                    Color.secondary.opacity(0.2)
+                }
+            } else {
+                Color.secondary.opacity(0.2)
+            }
+        }
+        .frame(width: 40, height: 40)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .help(preview.imageText ?? "")
     }
 }

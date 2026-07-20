@@ -20,6 +20,7 @@ public class SwordRPC {
   // MARK: Technical stuff
   let pid: Int32
   var socket: Socket? = nil
+  var readBuffer = Data()
   let worker: DispatchQueue
   let encoder = JSONEncoder()
   let decoder = JSONDecoder()
@@ -58,15 +59,18 @@ public class SwordRPC {
   }
 
   public func connect() -> Bool {
-    let tmp = NSTemporaryDirectory()
-
-    guard let socket = self.socket else {
-      print("[SwordRPC] Unable to connect")
-      return false
-    }
+    let tmp = URL(fileURLWithPath: NSTemporaryDirectory())
 
     for i in 0 ..< 10 {
-      try? socket.connect(to: "\(tmp)/discord-ipc-\(i)")
+      // Start from a fresh socket since one that failed to connect cannot be reused
+      self.createSocket()
+
+      guard let socket = self.socket else {
+        print("[SwordRPC] Unable to connect")
+        return false
+      }
+
+      try? socket.connect(to: tmp.appendingPathComponent("discord-ipc-\(i)").path)
 
       guard !socket.isConnected else {
         self.handshake()

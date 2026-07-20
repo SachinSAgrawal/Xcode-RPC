@@ -12,6 +12,11 @@ import Socket
 extension SwordRPC {
 
   func createSocket() {
+    // Drop any previous socket so a failed connect attempt cannot leak or be reused
+    self.socket?.close()
+    self.socket = nil
+    self.readBuffer = Data()
+
     do {
       self.socket = try Socket.create(family: .unix, proto: .unix)
       try self.socket?.setBlocking(mode: false)
@@ -28,16 +33,26 @@ extension SwordRPC {
   func send(_ msg: String, _ op: OP) throws {
     let payload = msg.data(using: .utf8)!
 
-    var buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 8 + payload.count, alignment: 1)
+    // Build the header ahead of the payload so nothing has to be shifted in place
+    var frame = Data(capacity: 8 + payload.count)
+    withUnsafeBytes(of: op.rawValue.littleEndian) { frame.append(contentsOf: $0) }
+    withUnsafeBytes(of: UInt32(payload.count).littleEndian) { frame.append(contentsOf: $0) }
+    frame.append(payload)
 
-    defer { buffer.deallocate() }
+    try frame.withUnsafeBytes { buffer in
+      _ = try self.socket?.write(from: buffer.baseAddress!, bufSize: buffer.count)
+    }
+  }
 
-    buffer.copyBytes(from: payload)
-    buffer[8...] = buffer[..<payload.count]
-    buffer.storeBytes(of: op.rawValue, as: UInt32.self)
-    buffer.storeBytes(of: UInt32(payload.count), toByteOffset: 4, as: UInt32.self)
+  // Pull whatever is available into the rolling buffer so partial frames are never dropped
+  func fillBuffer() throws {
+    var chunk = Data()
 
-    try self.socket?.write(from: buffer.baseAddress!, bufSize: buffer.count)
+    let read = try self.socket?.read(into: &chunk) ?? 0
+
+    if read > 0 {
+      self.readBuffer.append(chunk)
+    }
   }
 
   func receive() {
@@ -53,41 +68,34 @@ extension SwordRPC {
       self.receive()
 
       do {
-        let headerPtr = UnsafeMutablePointer<Int8>.allocate(capacity: 8)
-        let headerRawPtr = UnsafeRawPointer(headerPtr)
+        try self.fillBuffer()
 
-        defer {
-          free(headerPtr)
+        // Drain every whole frame and leave any partial one in the buffer for next time
+        while self.readBuffer.count >= 8 {
+          let header = [UInt8](self.readBuffer.prefix(8))
+
+          let opValue = UInt32(header[0]) | UInt32(header[1]) << 8
+            | UInt32(header[2]) << 16 | UInt32(header[3]) << 24
+          let length = UInt32(header[4]) | UInt32(header[5]) << 8
+            | UInt32(header[6]) << 16 | UInt32(header[7]) << 24
+
+          // A bad header means the stream is desynced and cannot be realigned by guessing
+          guard length < 1_000_000, let op = OP(rawValue: opValue) else {
+            print("[SwordRPC] Dropping desynced connection")
+            self.socket?.close()
+            return
+          }
+
+          let total = 8 + Int(length)
+
+          // Wait for the rest of the payload rather than consuming a half frame
+          guard self.readBuffer.count >= total else { return }
+
+          let payload = Data(self.readBuffer.dropFirst(8).prefix(Int(length)))
+          self.readBuffer = Data(self.readBuffer.dropFirst(total))
+
+          self.handlePayload(op, payload)
         }
-
-        var response = try self.socket?.read(into: headerPtr, bufSize: 8, truncate: true)
-
-        guard response! > 0 else {
-          return
-        }
-
-        let opValue = headerRawPtr.load(as: UInt32.self)
-        let length = headerRawPtr.load(fromByteOffset: 4, as: UInt32.self)
-
-        guard length > 0, let op = OP(rawValue: opValue) else {
-          return
-        }
-
-        let payloadPtr = UnsafeMutablePointer<Int8>.allocate(capacity: Int(length))
-
-        defer {
-          free(payloadPtr)
-        }
-
-        response = try self.socket?.read(into: payloadPtr, bufSize: Int(length), truncate: true)
-
-        guard response! > 0 else {
-          return
-        }
-
-        let data = Data(bytes: UnsafeRawPointer(payloadPtr), count: Int(length))
-
-        self.handlePayload(op, data)
 
       }catch {
         return
@@ -126,15 +134,17 @@ extension SwordRPC {
   func handlePayload(_ op: OP, _ json: Data) {
     switch op {
     case .close:
+      // Discord does not always populate these so treat them as optional
       let data = self.decode(json)
-      let code = data["code"] as! Int
-      let message = data["message"] as! String
+      let code = data["code"] as? Int
+      let message = data["message"] as? String
       self.socket?.close()
       self.disconnectHandler?(self, code, message)
       self.delegate?.swordRPCDidDisconnect(self, code: code, message: message)
 
     case .ping:
-      try? self.send(String(data: json, encoding: .utf8)!, .pong)
+      guard let payload = String(data: json, encoding: .utf8) else { return }
+      try? self.send(payload, .pong)
 
     case .frame:
       self.handleEvent(self.decode(json))
@@ -150,26 +160,29 @@ extension SwordRPC {
       return
     }
 
-    let data = data["data"] as! [String: Any]
+    // Anything off the socket is untrusted so a malformed frame is ignored rather than fatal
+    guard let data = data["data"] as? [String: Any] else {
+      return
+    }
 
     switch event {
     case.error:
-      let code = data["code"] as! Int
-      let message = data["message"] as! String
+      guard let code = data["code"] as? Int,
+            let message = data["message"] as? String else { return }
       self.errorHandler?(self, code, message)
       self.delegate?.swordRPCDidReceiveError(self, code: code, message: message)
 
     case .join:
-      let secret = data["secret"] as! String
+      guard let secret = data["secret"] as? String else { return }
       self.joinGameHandler?(self, secret)
       self.delegate?.swordRPCDidJoinGame(self, secret: secret)
 
     case .joinRequest:
-      let requestData = data["user"] as! [String: Any]
-      let joinRequest = try! self.decoder.decode(
-        JoinRequest.self, from: self.encode(requestData)
-      )
-      let secret = data["secret"] as! String
+      guard let requestData = data["user"] as? [String: Any],
+            let joinRequest = try? self.decoder.decode(
+              JoinRequest.self, from: self.encode(requestData)
+            ),
+            let secret = data["secret"] as? String else { return }
       self.joinRequestHandler?(self, joinRequest, secret)
       self.delegate?.swordRPCDidReceiveJoinRequest(self, request: joinRequest, secret: secret)
 
@@ -179,7 +192,7 @@ extension SwordRPC {
       self.updatePresence()
 
     case.spectate:
-      let secret = data["secret"] as! String
+      guard let secret = data["secret"] as? String else { return }
       self.spectateGameHandler?(self, secret)
       self.delegate?.swordRPCDidSpectateGame(self, secret: secret)
     }
@@ -201,12 +214,21 @@ extension SwordRPC {
 //
 //      self.presence = nil
 
+      // Send null to clear the activity since there may be no presence set yet
+      var activity = "null"
+
+      if let presence = self.presence,
+         let encoded = try? self.encoder.encode(presence),
+         let string = String(data: encoded, encoding: .utf8) {
+        activity = string
+      }
+
       let json = """
           {
             "cmd": "SET_ACTIVITY",
             "args": {
               "pid": \(self.pid),
-              "activity": \(String(data: try! self.encoder.encode(presence), encoding: .utf8)!)
+              "activity": \(activity)
             },
             "nonce": "\(UUID().uuidString)"
           }

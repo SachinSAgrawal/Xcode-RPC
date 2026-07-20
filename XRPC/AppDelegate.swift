@@ -20,13 +20,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Shared RPC instance
     var rpc = RPC.shared
-    
+
+    // Nudge the hammer above the default 15pt without crowding the items beside it
+    static let statusIconConfiguration = NSImage.SymbolConfiguration(pointSize: 16, weight: .regular)
+
+    // Build the status bar icon in either its idle or active variant
+    static func statusBarIcon(filled: Bool) -> NSImage? {
+        NSImage(systemSymbolName: filled ? "hammer.circle.fill" : "hammer.circle",
+                accessibilityDescription: "Xcode RPC")?
+            .withSymbolConfiguration(statusIconConfiguration)
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Set the AppDelegate instance
         AppDelegate.instance = self
         
         // Configure status bar item
-        statusBarItem.button?.image = .init(systemSymbolName: "hammer.circle", accessibilityDescription: "Xcode RPC")
+        statusBarItem.button?.image = Self.statusBarIcon(filled: false)
         statusBarItem.button?.imagePosition = .imageLeading
         statusBarItem.menu = menu.createMenu() // Create and set the menu
         
@@ -45,25 +55,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Function to show the setup window
     func showSetupWindow() {
+        // Reuse the existing window if setup is already on screen
+        if let window {
+            NSApp.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(self)
+            return
+        }
+
         // Create setup view
         let contentView = SetupView()
         // View controller to handle window close
         let controller = KillOnCloseViewController()
-        // Create window with controller
-        self.window = .init(contentViewController: controller)
-        
-        self.window?.contentViewController?.view = NSHostingView(rootView: contentView)
-        self.window?.setContentSize(.init(width: 300, height: 400))
-        self.window?.titleVisibility = .hidden
-        self.window?.backgroundColor = .clear
-//        self.window?.standardWindowButton(.closeButton)?.isHidden = true
-        self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        self.window?.standardWindowButton(.zoomButton)?.isHidden = true
-//        let titlebar = self.window?.standardWindowButton(.closeButton)?.superview
-//        self.window?.titlebarAppearsTransparent = true
-        self.window?.makeKeyAndOrderFront(self)
-        SetupVM.shared.setupWindowClose = { self.window?.close(); self.window = nil}
+        let hosting = NSHostingView(rootView: contentView)
+        hosting.frame.size = hosting.fittingSize
+        controller.view = hosting
+
+        // Skip the titlebar and frame outline so nothing draws around the glass
+        let window = KeyableBorderlessWindow(
+            contentRect: .init(origin: .zero, size: hosting.fittingSize),
+            styleMask: [.borderless, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        self.window = window
+        window.contentViewController = controller
+
+        window.isMovableByWindowBackground = true
+        window.backgroundColor = .clear
+        window.isOpaque = false
+        window.hasShadow = true
+
+        // Start above everything so the user actually sees it
+        window.level = .floating
+
+        window.setContentSize(hosting.fittingSize)
+        window.center()
+
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(self)
+
+        // Drop to a normal window after showing so it stops hovering over other apps
+        DispatchQueue.main.async {
+            window.level = .normal
+        }
+
+        SetupVM.shared.setupWindowClose = { [weak self] in
+            // Block dismissal until accessibility is actually granted
+            guard SetupVM.shared.accessibilityAllowed else { return }
+            self?.window?.close()
+            self?.window = nil
+        }
     }
+}
+
+// MARK: Borderless Window
+
+// Restore key status since borderless windows refuse it and that would break the buttons
+class KeyableBorderlessWindow: NSWindow {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { true }
 }
 
 // MARK: Exit on Close
@@ -100,163 +150,15 @@ class EventMonitor {
     
     // Start monitoring events
     public func start() {
-        monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler) as! NSObject
+        // No cast since this returns nil when the monitor cannot be installed
+        monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler)
     }
-    
+
     // Stop monitoring events
     public func stop() {
-        if monitor != nil {
-            NSEvent.removeMonitor(monitor!)
-            monitor = nil
+        if let monitor {
+            NSEvent.removeMonitor(monitor)
+            self.monitor = nil
         }
     }
 }
-
-/*
-class AppDelegate: NSObject, NSApplicationDelegate {
-    var popover = NSPopover.init()
-    var statusBar: StatusBarController?
-    var window: NSWindow? = nil
-    
-    var rpc = RPC.shared
-    
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Create the SwiftUI view that provides the contents
-        let contentView = MenuBarView()
-        NSApp.setActivationPolicy(NSApplication.ActivationPolicy.accessory)
-        
-        // Set the SwiftUI's ContentView to the Popover's ContentViewController
-        popover.contentViewController = NSViewController()
-        popover.contentSize = NSSize(width: 128, height: 128)
-        popover.contentViewController?.view = NSHostingView(rootView: contentView)
-        
-        // Create the Status Bar Item with the Popover
-        statusBar = StatusBarController.init(popover)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.rpc.initialCheck()
-        }
-    }
-    
-    func applicationDidBecomeActive(_ notification: Notification) {
-        NSApp.setActivationPolicy(NSApplication.ActivationPolicy.accessory)
-    }
-    
-    func popMenubarView() {
-        guard let statusBar else { return }
-        statusBar.hidePopover(nil)
-    }
-    
-    func showMenubarView() {
-        guard let statusBar else { return }
-        statusBar.showPopover(nil)
-    }
-    
-    func showSetupWindow() {
-        let contentView = SetupView()
-        let controller = KillOnCloseViewController()
-        self.window = .init(contentViewController: controller)
-        self.window?.contentViewController?.view = NSHostingView(rootView: contentView)
-        self.window?.setContentSize(.init(width: 300, height: 400))
-        self.window?.titleVisibility = .hidden
-        self.window?.backgroundColor = .clear
-        //    self.window?.standardWindowButton(.closeButton)?.isHidden = true
-        self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        self.window?.standardWindowButton(.zoomButton)?.isHidden = true
-        let titlebar = self.window?.standardWindowButton(.closeButton)?.superview
-        //    self.window?.titlebarAppearsTransparent = true
-        self.window?.makeKeyAndOrderFront(self)
-        SetupVM.shared.setupWindowClose = { self.window?.close(); self.window = nil}
-    }
-}
-
-class KillOnCloseViewController: NSViewController {
-    override func viewDidAppear() {
-        super.viewDidAppear()
-    }
-    
-    override func viewDidDisappear() {
-        guard SetupVM.shared.accessibilityAllowed else {
-            exit(0)
-        }
-    }
-}
-
-class EventMonitor {
-    private var monitor: Any?
-    private let mask: NSEvent.EventTypeMask
-    private let handler: (NSEvent?) -> Void
-    
-    public init(mask: NSEvent.EventTypeMask, handler: @escaping (NSEvent?) -> Void) {
-        self.mask = mask
-        self.handler = handler
-    }
-    
-    deinit {
-        stop()
-    }
-    
-    public func start() {
-        monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler) as! NSObject
-    }
-    
-    public func stop() {
-        if monitor != nil {
-            NSEvent.removeMonitor(monitor!)
-            monitor = nil
-        }
-    }
-}
-
-class StatusBarController {
-    private var statusBar: NSStatusBar
-    private var statusItem: NSStatusItem
-    private var popover: NSPopover
-    private var eventMonitor: EventMonitor?
-    
-    init(_ popover: NSPopover)
-    {
-        self.popover = popover
-        statusBar = NSStatusBar.init()
-        statusItem = statusBar.statusItem(withLength: 28.0)
-        
-        if let statusBarButton = statusItem.button {
-            statusBarButton.image = .init(systemSymbolName: "hammer.fill", accessibilityDescription: "XRPC")
-            statusBarButton.image?.size = NSSize(width: 18.0, height: 18.0)
-            statusBarButton.image?.isTemplate = true
-            
-            statusBarButton.action = #selector(togglePopover(sender:))
-            statusBarButton.target = self
-        }
-        
-        eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown], handler: mouseEventHandler)
-    }
-    
-    @objc func togglePopover(sender: AnyObject) {
-        if(popover.isShown) {
-            hidePopover(sender)
-        }
-        else {
-            showPopover(sender)
-        }
-    }
-    
-    func showPopover(_ sender: AnyObject?) {
-        if let statusBarButton = statusItem.button {
-            popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
-            eventMonitor?.start()
-        }
-    }
-    
-    func hidePopover(_ sender: AnyObject?) {
-        popover.performClose(sender)
-        eventMonitor?.stop()
-    }
-    
-    func mouseEventHandler(_ event: NSEvent?) {
-        if(popover.isShown) {
-            hidePopover(event!)
-        }
-    }
-}
-*/
