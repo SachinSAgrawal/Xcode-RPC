@@ -30,10 +30,10 @@ class AXScrape: ObservableObject {
         timer = nil
     }
     
-    // Published property to track presence state
+    // Track the presence state
     @Published var presenceState: PresenceState = .xcodeNoWindowsOpen
-    
-    // Function to scrape Xcode state
+
+    // Scrape the Xcode state
     func scrape() {
         // Check if AXSwift is working
         guard UIElement.isProcessTrusted(withPrompt: false) else { return }
@@ -91,6 +91,7 @@ class AXScrape: ObservableObject {
             workspace: workspace,
             editorFile: doc,
             isEditingFile: isEditing,
+
             // Preserve Xcode last date or make new date
             sessionDate: currentSessionDate ?? xcodeProcess?.launchDate ?? .now, /// Used for timings
             issues: issues
@@ -122,9 +123,7 @@ class AXScrape: ObservableObject {
             for annotation in annotations {
                 counts.total += 1
 
-                // The kind is only exposed in the description string
-                // Match anywhere and case-insensitively: Xcode phrases this as
-                // "Error", "1 error", "Issue: error…" depending on the annotation
+                // Read the kind from the description string matching loosely since Xcode phrases it inconsistently
                 let label = ((try? annotation.attribute(.description) ?? "") ?? "").lowercased()
                 if label.contains("error") {
                     counts.errors += 1
@@ -194,7 +193,7 @@ func allElements(in element: UIElement, matching filter: (UIElement) -> Bool) ->
 
 // MARK: Presence State
 enum PresenceState {
-    // Enumeration to represent different presence states
+    // Represent the different presence states
     case xcodeNotRunning
     case xcodeNoWindowsOpen  /// When Xcode has no windows and is doing nothing
     case working(XcodeState) /// When user is working
@@ -223,7 +222,7 @@ struct XcodeState: Equatable {
     // Errors and warnings Xcode is showing in this file
     var issues: IssueCounts = .none
 
-    // Boolean indicating if Xcode is idle and no file is open
+    // True when Xcode is idle with no file open
     var isIdle: Bool {
         // Match the whole extension so names like contents.xcworkspacedata do not count
         guard let ext = editorFile?.pathExtension.lowercased() else { return true }
@@ -239,9 +238,11 @@ struct XcodeState: Equatable {
     // File extension of the editing file
     var fileExtension: String? {
         guard let fileName else { return nil }
+
         // Strip a leading dot so dotfiles like .gitignore still resolve to their icon
         let isDotfile = fileName.hasPrefix(".")
         let trimmed = isDotfile ? String(fileName.dropFirst()) : fileName
+
         // Nil for extensionless names like Makefile rather than the whole filename
         guard isDotfile || trimmed.contains(".") else { return nil }
         return trimmed.split(separator: ".").last.map { $0.lowercased() }
@@ -250,7 +251,7 @@ struct XcodeState: Equatable {
 
 // MARK: Extension
 fileprivate extension String {
-    // Extension to count occurrences of a string within another string
+    // Count occurrences of a substring within a string
     func numberOfOccurrencesOf(string: String) -> Int {
         self.components(separatedBy: string).count - 1
     }

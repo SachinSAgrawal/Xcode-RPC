@@ -13,7 +13,7 @@ class SetupVM: ObservableObject {
     // Conforms to ObservableObject
     static let shared = SetupVM() // Singleton instance
 
-    // Published property to track if accessibility is allowed
+    // Track whether accessibility is allowed
     @Published var accessibilityAllowed: Bool = UIElement.isProcessTrusted(withPrompt: false)
 
     // Timer that re-checks trust so the UI updates the moment it is granted
@@ -23,10 +23,18 @@ class SetupVM: ObservableObject {
     init() {
     }
 
-    // Function to prompt for accessibility permissions
+    // Prompt for accessibility permissions
     func accessibilityPrompt() {
         self.accessibilityAllowed = UIElement.isProcessTrusted(withPrompt: true)
         startPolling()
+    }
+
+    // Re-read trust on demand so callers like the menu bar can reflect the live state
+    func refreshTrust() {
+        let trusted = UIElement.isProcessTrusted(withPrompt: false)
+        if trusted != accessibilityAllowed {
+            accessibilityAllowed = trusted
+        }
     }
 
     // Start watching for the permission being granted outside the app
@@ -48,7 +56,7 @@ class SetupVM: ObservableObject {
         pollTimer = nil
     }
 
-    // Closure to be executed when setup window is closed
+    // Run when the setup window closes
     var setupWindowClose: () -> Void = {}
 }
 
@@ -92,7 +100,7 @@ struct SetupView: View {
 
                 Spacer(minLength: 8)
 
-                // Button to allow or indicate accessibility status
+                // Allow access or show the current status
                 if !vm.accessibilityAllowed {
                     Button("Allow") {
                         // Prompt for accessibility permission
@@ -108,7 +116,7 @@ struct SetupView: View {
             .padding(12)
             .glassCard(cornerRadius: 12)
 
-            // Button to finish setup which stays blocked until access is granted
+            // Finish setup which stays disabled until access is granted
             Button("Finish") {
                 // Call the setup window close action
                 vm.setupWindowClose()

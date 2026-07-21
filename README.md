@@ -18,7 +18,8 @@ Ths app was fully created by Lakhan Lothiyi, also known as llsc12. I wanted to k
 * There is a preview of the activity displayed on Discord.
 * A refresh button has been added in case the RPC does not update.
 * The menu bar icon's size better matches other icons.
-* The appp should no longer be identified as malware by macOS.
+* After granting accessibility permissions, the app auto-launches.
+* The app should no longer be identified as malware by macOS.
 * Other various performance improvements and bug fixes.
 
 ## Installation
@@ -42,13 +43,12 @@ Assuming I did things correctly, check out [Releases](https://github.com/SachinS
 If you find any, you are welcome to open up a new issue here, however, since I really didn't code this app, I would recommend opening one on llsc12's repository. 
 
 #### Known
-- [x] Some file types do not display an icon.
+- [x] Some file types show no icon or the wrong type (e.g. no extension, `contents.xcworkspacedata`).
 - [x] Presence is always one scrape cycle (2s) stale.
 - [x] A stale SwordRPC instance spuriously marks you disconnected.
 - [x] The "no windows open" state is never actually reported.
 - [x] Malformed data from Discord or a presence that was never set can crash the app.
 - [x] A message split across two reads permanently desyncs the connection.
-- [x] Files without an extension, or ones like `contents.xcworkspacedata`, show the wrong type.
 - [x] The elapsed timer keeps counting from the previous project after switching.
 - [x] A failed connection attempt reuses a dead socket.
 

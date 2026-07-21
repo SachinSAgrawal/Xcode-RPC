@@ -53,7 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(NSApplication.ActivationPolicy.accessory)
     }
     
-    // Function to show the setup window
+    // Show the setup window
     func showSetupWindow() {
         // Reuse the existing window if setup is already on screen
         if let window {
@@ -64,16 +64,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Create setup view
         let contentView = SetupView()
-        // View controller to handle window close
+
+        // Exit the app when this window closes
         let controller = KillOnCloseViewController()
         let hosting = NSHostingView(rootView: contentView)
         hosting.frame.size = hosting.fittingSize
+
+        // Round the backing layer so the window shadow follows the glass instead of a rectangle
+        hosting.wantsLayer = true
+        hosting.layer?.backgroundColor = .clear
+        hosting.layer?.cornerRadius = 20
+        hosting.layer?.cornerCurve = .continuous
+        hosting.layer?.masksToBounds = true
         controller.view = hosting
 
-        // Skip the titlebar and frame outline so nothing draws around the glass
+        // Borderless only — `.fullSizeContentView` would keep a rectangular theme frame around the glass
         let window = KeyableBorderlessWindow(
             contentRect: .init(origin: .zero, size: hosting.fittingSize),
-            styleMask: [.borderless, .fullSizeContentView],
+            styleMask: .borderless,
             backing: .buffered,
             defer: false
         )
@@ -83,6 +91,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.isMovableByWindowBackground = true
         window.backgroundColor = .clear
         window.isOpaque = false
+        
         window.hasShadow = true
 
         // Start above everything so the user actually sees it
@@ -104,6 +113,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard SetupVM.shared.accessibilityAllowed else { return }
             self?.window?.close()
             self?.window = nil
+            
+            // Relaunch so the just-granted accessibility access actually applies
+            self?.relaunch()
+        }
+    }
+
+    // Restart in a fresh process since macOS only grants accessibility at launch
+    func relaunch() {
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.createsNewApplicationInstance = true
+        NSWorkspace.shared.openApplication(at: Bundle.main.bundleURL,
+                                           configuration: configuration) { _, _ in
+            DispatchQueue.main.async { exit(0) }
         }
     }
 }
@@ -123,7 +145,7 @@ class KillOnCloseViewController: NSViewController {
         super.viewDidAppear()
     }
     
-    // If accessibility is not allowed, exit the application
+    // Exit the app when accessibility was never granted
     override func viewDidDisappear() {
         guard SetupVM.shared.accessibilityAllowed else {
             exit(0)

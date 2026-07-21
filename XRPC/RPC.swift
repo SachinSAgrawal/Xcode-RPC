@@ -47,7 +47,7 @@ class RPC: ObservableObject, SwordRPCDelegate {
 
     static let shared = RPC() // Singleton instance
     
-    // Variable to track if the app is paused
+    // Track whether the app is paused
     @Published var isPaused = false
     
     // SwordRPC instance
@@ -71,9 +71,10 @@ class RPC: ObservableObject, SwordRPCDelegate {
     // Publish a snapshot of the presence currently being reported to Discord
     @Published var preview = PresencePreview(isActive: false)
 
-    // Method to toggle pause/resume state
+    // Toggle the pause and resume state
     func togglePauseResume() {
         isPaused.toggle()
+
         // Apply it now rather than waiting out the rest of the scrape interval
         setPresence(scraper.presenceState)
     }
@@ -83,31 +84,33 @@ class RPC: ObservableObject, SwordRPCDelegate {
         scraper.scrape()
     }
     
-    // Function to perform initial check and connect RPC
+    // Perform the initial check and connect RPC
     func initialCheck() {
         // Check if AXSwift is working
         let axWorking = UIElement.isProcessTrusted(withPrompt: false)
+
         // Show setup window if AXSwift is not working
         if axWorking == false {
             (NSApplication.shared.delegate as! AppDelegate).showSetupWindow()
         }
+
         // Connect to Discord RPC
         rpcConnect()
     }
     
-    // Published property to track RPC connection status
+    // Track the RPC connection status
     @Published var rpcConnected: Bool = false
     
-    // Function to connect to Discord RPC
+    // Connect to Discord RPC
     func rpcConnect() {
-        // If already connected, return
+        // Skip connecting when already connected
         guard rpcConnected == false else { return }
         self.rpc = SwordRPC(appId: RPC_CLIENT_ID)
         self.rpc.delegate = self
         self.rpcConnected = self.rpc.connect()
     }
     
-    // Function to disconnect from Discord RPC
+    // Disconnect from Discord RPC
     func rpcDisconnect() {
         self.rpc.disconnect()
         self.rpcConnected = false
@@ -127,22 +130,23 @@ class RPC: ObservableObject, SwordRPCDelegate {
         rpc === self.rpc
     }
 
-    // Delegate method called when RPC connects
+    // Mark connected when RPC connects
     func swordRPCDidConnect(_ rpc: SwordRPC) {
         guard isCurrent(rpc) else { return }
         onMain { self.rpcConnected = true }
     }
 
-    // Delegate method called when RPC disconnects
+    // Mark disconnected when RPC disconnects
     func swordRPCDidDisconnect(_ rpc: SwordRPC, code: Int?, message msg: String?) {
         guard isCurrent(rpc) else { return }
         onMain { self.rpcConnected = false }
     }
 
-    // Delegate method called when RPC receives an error
+    // Disconnect when RPC reports an error
     func swordRPCDidReceiveError(_ rpc: SwordRPC, code: Int, message msg: String) {
         print("[RPC Error] \(code) :: \(msg)")
         guard isCurrent(rpc) else { return }
+
         // Disconnect from Discord RPC
         onMain { self.rpcDisconnect() }
     }

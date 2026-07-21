@@ -29,7 +29,7 @@ class MenuBar: NSObject {
     private var statusItemContainer: NSView?
     private var statusItemHosting: NSHostingView<StatusView>?
 
-    // Function to create and configure the menu
+    // Create and configure the menu
     func createMenu() -> NSMenu {
         let statusView = StatusView()
 
@@ -115,33 +115,33 @@ class MenuBar: NSObject {
         return menu
     }
     
-    // Action to toggle pause/resume state
+    // Toggle the pause and resume state
     @objc func togglePauseResume(sender: NSMenuItem) {
         // Call RPC method to toggle pause/resume then read back the single source of truth
         rpc.togglePauseResume()
         sender.title = rpc.isPaused ? "Resume" : "Pause"
     }
     
-    // Action to force the presence to re-read whatever file is open
+    // Force the presence to re-read whatever file is open
     @objc func refresh(sender: NSMenuItem) {
         rpc.forceRefresh()
     }
 
-    // Action to show the about panel
+    // Show the about panel
     @objc func about(sender: NSMenuItem) {
         // Activate first since an accessory app would open the panel behind other windows
         NSApp.activate(ignoringOtherApps: true)
         NSApp.orderFrontStandardAboutPanel()
     }
     
-    // Action to open a link in the default browser
+    // Open a link in the default browser
     @objc func openLink(sender: NSMenuItem) {
         let link = sender.representedObject as! String
         guard let url = URL(string: link) else { return }
         NSWorkspace.shared.open(url)
     }
     
-    // Action to quit the app
+    // Quit the app
     @objc func quit(sender: NSMenuItem) {
         NSApp.terminate(self)
     }
@@ -154,6 +154,9 @@ extension MenuBar: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
         // Resync in case the state was changed somewhere other than this menu item
         pauseResumeMenuItem?.title = rpc.isPaused ? "Resume" : "Pause"
+
+        // Re-read accessibility trust so the status view reflects it while setup is pending
+        SetupVM.shared.refreshTrust()
 
         guard let container = statusItemContainer,
               let hosting = statusItemHosting else { return }
