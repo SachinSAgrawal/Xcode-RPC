@@ -42,7 +42,7 @@ Assuming I did things correctly, check out [Releases](https://github.com/SachinS
 ## Bugs
 If you find any, you are welcome to open up a new issue here, however, since I really didn't code this app, I would recommend opening one on llsc12's repository. 
 
-#### Known
+#### Resolved
 - [x] Some file types show no icon or the wrong type (e.g. no extension, `contents.xcworkspacedata`).
 - [x] Presence is always one scrape cycle (2s) stale.
 - [x] A stale SwordRPC instance spuriously marks you disconnected.
